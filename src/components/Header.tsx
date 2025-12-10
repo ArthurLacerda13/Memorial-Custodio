@@ -42,12 +42,11 @@ export function Header() {
   }, [lastScrollY]);
 
   return (
-    <header 
-      ref={headerRef} 
-      className={`bg-sepia-coffee text-sepia-cream py-4 px-6 border-b-4 border-sepia-brown shadow-lg fixed top-0 w-full z-50 transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
-    >
+  <header 
+    ref={headerRef} 
+    className={`bg-sepia-coffee text-sepia-cream py-4 px-6 border-b-4 border-sepia-brown shadow-lg fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}
+  >
+
       <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between">
           {/* Logo - versão menor */}
