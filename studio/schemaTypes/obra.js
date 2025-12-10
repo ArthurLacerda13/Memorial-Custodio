@@ -68,6 +68,13 @@ export default {
       name: 'linkExterno',
       title: 'Link Externo (YouTube ou Site da Notícia)',
       type: 'url'
-    }
+    },
+    {
+      name: 'destaque',
+      title: 'Destacar no Carrossel (Topo do Site)?',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Marque isso se quiser que este item apareça no topo do site.'
+    },
   ]
 }

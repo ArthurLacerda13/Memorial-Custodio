@@ -1,92 +1,53 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Play, FileText, Mic, Camera, Newspaper, Feather } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ChevronLeft, ChevronRight, Play, FileText, Mic, Camera, Newspaper, Feather, BookOpen } from 'lucide-react';
+import { ImageWithFallback } from './ImageWithFallback'; // Ajuste o caminho se necessário (ex: ./ImageWithFallback)
 
-// Obras agregadas em destaque
-const featuredWorks = [
-  {
-    id: "retratos", // Mude o ID se necessário
-    type: "photo",
-    title: "Retratos: A Face Humana de Luiz Custódio",
-    author: "Coletivo F8",
-    description: "Um ensaio visual intimista capturado pelo Coletivo F8, revelando as nuances, o sorriso e a presença marcante do mestre além da sala de aula.",
-    imageUrl: "https://static.wixstatic.com/media/8fd669_12197c99a806488b9c27036c4787e86d~mv2.jpg/v1/fill/w_740,h_490,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/8fd669_12197c99a806488b9c27036c4787e86d~mv2.jpg",
-    category: "Fotorreportagem",
-    icon: Camera,
-    date: "Acervo F8"
-  },
-  {
-    id: "18-folkcom",
-    type: "news",
-    title: "18º Folkcom: Homenagens aos 50 Anos do Jornalismo",
-    author: "Portal UEPB",
-    description: "Cobertura oficial da abertura do evento, marcada por depoimentos emocionantes e pelo reconhecimento do legado histórico do curso na região.",
-    imageUrl: "https://uepb.edu.br/wp-content/uploads/2023/06/Abertura-do-18a-Folkcomunicacao-03.jpeg",
-    category: "Matéria Institucional",
-    icon: Newspaper,
-    date: "Setembro 2018"
-  },
-  {
-    id: "cronica",
-    type: "chronicle",
-    title: "Crônica: O Jovem Custódio e o Cineclube",
-    author: "Braulio Tavares",
-    description: "O escritor Braulio Tavares relembra, em texto emocionante, a juventude ao lado de Custódio e a paixão compartilhada pelo cinema nos anos 60.",
-    imageUrl: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDaCDoN5QFyyfX28NNbx_b5sGajWT6m9SRRuL7xswppbXrMCbax_6p8ThpUTSzP9-miY2j8QuOYe77AZJX1CjOaAy2rO1zc2l-rW6NyaGV13z5GudBkiYUmKY6X2ZupV91NLlIKS611BCAqRUyt1PX3Cdpl02NaVVp_SmxMTYvrVgMQcTupv0P7I2vu1g/s728/Cineclube%20de%20Campina%20Grande%201967.jpg",
-    category: "Crônica & Memória",
-    icon: Feather,
-    date: "Fevereiro 2025"
+// Função auxiliar para escolher o ícone com base no tipo
+const getIconByType = (type) => {
+  switch (type) {
+    case 'video': return Play;
+    case 'audio': return Mic;
+    case 'book': return BookOpen;
+    case 'article': return Newspaper;
+    case 'photo': return Camera;
+    default: return Feather;
   }
-];
+};
 
-interface HeroCarouselProps {
-  works?: Array<{
-    id: string;
-    title: string;
-    date: string;
-    description: string;
-    imageUrl: string;
-    pdfUrl?: string;
-  }>;
-}
-
-export function HeroCarousel({ works }: HeroCarouselProps) {
+export function HeroCarousel({ items = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   // Auto-play do carrossel
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || items.length === 0) return;
     
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % featuredWorks.length);
+      setCurrentIndex((prev) => (prev + 1) % items.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, items.length]);
 
   const goToPrevious = () => {
     setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev - 1 + featuredWorks.length) % featuredWorks.length);
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   };
 
   const goToNext = () => {
     setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev + 1) % featuredWorks.length);
+    setCurrentIndex((prev) => (prev + 1) % items.length);
   };
 
-  const handleExploreWork = () => {
-    const currentWorkData = works?.find(work => work.id === featuredWorks[currentIndex].id);
-    if (currentWorkData?.pdfUrl) {
-      window.open(currentWorkData.pdfUrl, '_blank');
-    }
-  };
+  // Se não houver itens cadastrados (ou carregando), não mostra nada
+  if (!items || items.length === 0) return null;
 
-  const currentWork = featuredWorks[currentIndex];
-  const IconComponent = currentWork.icon;
+  const currentWork = items[currentIndex];
+  // Pega o ícone certo ou usa Feather como padrão
+  const IconComponent = getIconByType(currentWork.type);
 
   return (
-    <section className="relative bg-gradient-to-br from-sepia-coffee to-sepia-brown py-20 px-6">
+    <section className="relative bg-gradient-to-br from-sepia-coffee to-sepia-brown py-20 px-6 overflow-hidden">
       <div className="container mx-auto max-w-7xl relative">
         {/* Controles de Navegação Desktop - Nas extremidades */}
         <button
@@ -108,57 +69,69 @@ export function HeroCarousel({ works }: HeroCarouselProps) {
         {/* Conteúdo do Carrossel */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[500px]">
           {/* Lado Esquerdo - Conteúdo */}
-          <div className="space-y-6 order-3 lg:order-1">
+          <div className="space-y-6 order-3 lg:order-1 animate-fade-in">
             <div className="flex items-center gap-3">
               <IconComponent className="w-6 h-6 text-sepia-warm" />
-              <span className="text-sm uppercase tracking-wider text-sepia-warm">
-                {currentWork.category} • {currentWork.date}
+              <span className="text-sm uppercase tracking-wider text-sepia-warm font-semibold">
+                {currentWork.type === 'book' ? 'Acervo Histórico' : 'Destaque da Comunidade'}
               </span>
             </div>
 
-            <h1 className="text-sepia-cream">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-sepia-cream leading-tight">
               {currentWork.title}
             </h1>
 
-            <p className="text-sepia-light text-lg leading-relaxed">
+            <p className="text-sepia-light text-lg leading-relaxed line-clamp-4">
               {currentWork.description}
             </p>
 
-            <div className="flex items-center gap-3 pt-4">
-              <div className="h-px w-12 bg-sepia-warm" />
-              <p className="text-sm text-sepia-warm italic">
-                por {currentWork.author}
-              </p>
-            </div>
+            {/* Se tiver autor (alguns podem não ter) */}
+            {currentWork.author && (
+              <div className="flex items-center gap-3 pt-2">
+                <div className="h-px w-12 bg-sepia-warm" />
+                <p className="text-sm text-sepia-warm italic">
+                  por {currentWork.author}
+                </p>
+              </div>
+            )}
 
             <div className="flex gap-4 pt-6">
+              {currentWork.link && (
+                <a 
+                  href={currentWork.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-sepia-warm hover:bg-sepia-light text-sepia-coffee px-8 py-3 rounded-sm transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wider text-sm font-bold flex items-center gap-2"
+                >
+                  {currentWork.type === 'book' ? <BookOpen className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  Explorar
+                </a>
+              )}
+              
               <button 
-                onClick={handleExploreWork}
-                className="bg-sepia-warm hover:bg-sepia-light text-sepia-coffee px-8 py-3 rounded-sm transition-all duration-300 shadow-lg hover:shadow-xl uppercase tracking-wider text-sm"
+                onClick={() => document.getElementById('acervo')?.scrollIntoView({ behavior: 'smooth' })}
+                className="border-2 border-sepia-warm text-sepia-warm hover:bg-sepia-warm hover:text-sepia-coffee px-8 py-3 rounded-sm transition-all duration-300 uppercase tracking-wider text-sm font-bold"
               >
-                Explorar Obra
-              </button>
-              <button className="border-2 border-sepia-warm text-sepia-warm hover:bg-sepia-warm hover:text-sepia-coffee px-8 py-3 rounded-sm transition-all duration-300 uppercase tracking-wider text-sm">
-                Ver Detalhes
+                Ver Acervo Completo
               </button>
             </div>
           </div>
 
           {/* Lado Direito - Imagem */}
           <div className="relative order-1 lg:order-2">
-            <div className="relative aspect-[4/3] rounded-sm overflow-hidden shadow-2xl border-4 border-sepia-warm/30">
+            <div className="relative aspect-[4/3] rounded-sm overflow-hidden shadow-2xl border-4 border-sepia-warm/30 group">
               <ImageWithFallback
                 src={currentWork.imageUrl}
                 alt={currentWork.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               {/* Overlay sutil */}
-              <div className="absolute inset-0 bg-gradient-to-t from-sepia-coffee/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-sepia-coffee/60 via-transparent to-transparent" />
             </div>
 
             {/* Indicadores do Carrossel */}
             <div className="flex justify-center gap-2 mt-6">
-              {featuredWorks.map((_, index) => (
+              {items.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => {

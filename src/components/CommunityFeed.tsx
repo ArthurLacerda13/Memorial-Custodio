@@ -27,87 +27,87 @@ interface Contribution {
 }
 
 // Mock data - contribuições da comunidade
-const contributions: Contribution[] = [
-  {
-    id: "2",
-    type: "book",
-    title: "E-book: Ética do Jornalismo - Desafios da Contemporaneidade",
-    author: "Luiz Felipe Bolis, Zulmira Nóbrega e orgs.",
-    authorRole: "Mestrandos e Pesquisadores PPJ/UFPB | 2025",
-    date: "Lançamento 2025",
-    excerpt:
-      "Obra coletiva que debate os conflitos éticos em tempos de Inteligência Artificial e desinformação, reunindo entrevistas com grandes pesquisadores da área.",
-    imageUrl: "/img/etica-jornalismo.png",
-    category: "Publicação Acadêmica",
-    link: "/arquivos/ebook_etica.pdf",
-  },
-  {
-    id: "3",
-    type: "video",
-    title: "Aula Inaugural: Luiz Custódio (In Memoriam)",
-    author: "PPJ UFPB",
-    authorRole: "Homenagem Acadêmica",
-    date: "Março 2025",
-    excerpt:
-      "Aula inaugural especial dedicada à memória e ao legado científico e afetivo do Professor Custódio, reunindo depoimentos de pesquisadores, colegas e ex-alunos.",
-    imageUrl: "https://img.youtube.com/vi/2CIMPeWQT80/maxresdefault.jpg",
-    category: "Evento Acadêmico",
-    link: "https://www.youtube.com/live/2CIMPeWQT80",
-  },
-  {
-    id: "4",
-    type: "book",
-    title: "Livro: The Folkcommunication Theory",
-    author: "Rede Folkcom (Org. Marcelo Pires et al.)",
-    authorRole: "Publicação Internacional | 2025",
-    date: "Lançamento 2025",
-    excerpt:
-      "Obra histórica em inglês que consolida a teoria brasileira no exterior. O livro traz uma dedicatória especial à memória do Prof. Luiz Custódio, reconhecendo seu papel fundamental na área.",
-    imageUrl: "/img/capa-folkcom.png",
-    category: "Reconhecimento Internacional",
-    link: "https://www.redefolkcom.com.br/_files/ugd/d9bc9e_e7f888a2689544ccb525841fec5f3818.pdf",
-  },
-  {
-    id: "5",
-    type: "video",
-    title: "Homenagem Comunicurtas: O Legado do Educador",
-    author: "Festival Comunicurtas UEPB",
-    authorRole: "Tributo Institucional",
-    date: "Novembro 2025",
-    excerpt:
-      "O Festival Audiovisual de Campina Grande realizou uma sessão especial no Cine São José com a exibição de um vídeo celebrando a trajetória de Luiz Custódio na formação de comunicadores.",
-    imageUrl:
-      "https://uepb.edu.br/wp-content/uploads/2025/11/Professor-Luiz-Custodio-Homenageado-Comunicurtas-UEPB-2025.jpeg",
-    category: "Homenagem Audiovisual",
-    link: "https://uepb.edu.br/comunicurtas-uepb-homenageia-professor-luiz-custodio-com-exibicao-de-video-sobre-legado-do-educador/",
-  },
-  {
-    id: "6", 
-    type: "article", 
-    title: "Aspectos do Folkmarketing na Festa Achiropita",
-    author: "Iêda Cezar, Camila Escudero et al.",
-    authorRole: "Revista Internacional de Folkcomunicação",
-    date: "2022",
-    excerpt: "Artigo científico que utiliza referenciais teóricos de Luiz Custódio para analisar as estratégias de comunicação e sobrevivência das festas populares durante a pandemia de Covid-19.",
-    imageUrl: "/img/Aspectos_do_folkmarket.png", 
-    category: "Pesquisa Aplicada",
-    link: "/arquivos/Aspectos_do_folkmarketing.pdf" 
-  },
-  {
-    id: "7",
-    type: "book",
-    title: "Tese: A Festa do Maior São João do Mundo",
-    author: "Zulmira Nóbrega",
-    authorRole: "Doutora em Cultura e Sociedade (UFBA)",
-    date: "2010",
-    excerpt: "Tese de doutorado que analisa as dimensões culturais do São João de Campina Grande. O Prof. Luiz Custódio compôs a banca examinadora e é citado por sua coordenação no Seminário Folkcom.",
-    imageUrl: "/img/A_festa_do_maior_sao_joao.png", 
-    category: "Tese de Doutorado",
-    link: "/arquivos/A_festa_do_Maior_São_João_do_Mundo.pdf"
-  },
-];
+// const contributions: Contribution[] = [
+//   {
+//     id: "2",
+//     type: "book",
+//     title: "E-book: Ética do Jornalismo - Desafios da Contemporaneidade",
+//     author: "Luiz Felipe Bolis, Zulmira Nóbrega e orgs.",
+//     authorRole: "Mestrandos e Pesquisadores PPJ/UFPB | 2025",
+//     date: "Lançamento 2025",
+//     excerpt:
+//       "Obra coletiva que debate os conflitos éticos em tempos de Inteligência Artificial e desinformação, reunindo entrevistas com grandes pesquisadores da área.",
+//     imageUrl: "/img/etica-jornalismo.png",
+//     category: "Publicação Acadêmica",
+//     link: "/arquivos/ebook_etica.pdf",
+//   },
+//   {
+//     id: "3",
+//     type: "video",
+//     title: "Aula Inaugural: Luiz Custódio (In Memoriam)",
+//     author: "PPJ UFPB",
+//     authorRole: "Homenagem Acadêmica",
+//     date: "Março 2025",
+//     excerpt:
+//       "Aula inaugural especial dedicada à memória e ao legado científico e afetivo do Professor Custódio, reunindo depoimentos de pesquisadores, colegas e ex-alunos.",
+//     imageUrl: "https://img.youtube.com/vi/2CIMPeWQT80/maxresdefault.jpg",
+//     category: "Evento Acadêmico",
+//     link: "https://www.youtube.com/live/2CIMPeWQT80",
+//   },
+//   {
+//     id: "4",
+//     type: "book",
+//     title: "Livro: The Folkcommunication Theory",
+//     author: "Rede Folkcom (Org. Marcelo Pires et al.)",
+//     authorRole: "Publicação Internacional | 2025",
+//     date: "Lançamento 2025",
+//     excerpt:
+//       "Obra histórica em inglês que consolida a teoria brasileira no exterior. O livro traz uma dedicatória especial à memória do Prof. Luiz Custódio, reconhecendo seu papel fundamental na área.",
+//     imageUrl: "/img/capa-folkcom.png",
+//     category: "Reconhecimento Internacional",
+//     link: "https://www.redefolkcom.com.br/_files/ugd/d9bc9e_e7f888a2689544ccb525841fec5f3818.pdf",
+//   },
+//   {
+//     id: "5",
+//     type: "video",
+//     title: "Homenagem Comunicurtas: O Legado do Educador",
+//     author: "Festival Comunicurtas UEPB",
+//     authorRole: "Tributo Institucional",
+//     date: "Novembro 2025",
+//     excerpt:
+//       "O Festival Audiovisual de Campina Grande realizou uma sessão especial no Cine São José com a exibição de um vídeo celebrando a trajetória de Luiz Custódio na formação de comunicadores.",
+//     imageUrl:
+//       "https://uepb.edu.br/wp-content/uploads/2025/11/Professor-Luiz-Custodio-Homenageado-Comunicurtas-UEPB-2025.jpeg",
+//     category: "Homenagem Audiovisual",
+//     link: "https://uepb.edu.br/comunicurtas-uepb-homenageia-professor-luiz-custodio-com-exibicao-de-video-sobre-legado-do-educador/",
+//   },
+//   {
+//     id: "6", 
+//     type: "article", 
+//     title: "Aspectos do Folkmarketing na Festa Achiropita",
+//     author: "Iêda Cezar, Camila Escudero et al.",
+//     authorRole: "Revista Internacional de Folkcomunicação",
+//     date: "2022",
+//     excerpt: "Artigo científico que utiliza referenciais teóricos de Luiz Custódio para analisar as estratégias de comunicação e sobrevivência das festas populares durante a pandemia de Covid-19.",
+//     imageUrl: "/img/Aspectos_do_folkmarket.png", 
+//     category: "Pesquisa Aplicada",
+//     link: "/arquivos/Aspectos_do_folkmarketing.pdf" 
+//   },
+//   {
+//     id: "7",
+//     type: "book",
+//     title: "Tese: A Festa do Maior São João do Mundo",
+//     author: "Zulmira Nóbrega",
+//     authorRole: "Doutora em Cultura e Sociedade (UFBA)",
+//     date: "2010",
+//     excerpt: "Tese de doutorado que analisa as dimensões culturais do São João de Campina Grande. O Prof. Luiz Custódio compôs a banca examinadora e é citado por sua coordenação no Seminário Folkcom.",
+//     imageUrl: "/img/A_festa_do_maior_sao_joao.png", 
+//     category: "Tese de Doutorado",
+//     link: "/arquivos/A_festa_do_Maior_São_João_do_Mundo.pdf"
+//   },
+// ];
 
-export function CommunityFeed() {
+export function CommunityFeed({ contributions = [] }) {
   const [filter, setFilter] = useState<ContentType>("all");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(3);

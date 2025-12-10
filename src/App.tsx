@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'; // <--- ADICIONEI ISSO
+import { useState, useEffect } from 'react';
 import { HeroCarousel } from "./components/HeroCarousel";
 import { CommunityFeed } from "./components/CommunityFeed";
 import { HistoricalFoundation } from "./components/HistoricalFoundation";
 import { QuoteSection } from "./components/QuoteSection";
 import { Header } from "./components/Header";
-import { client } from './sanity'; // Removi urlFor se não for usar aqui direto
+import { client } from './sanity';
 
 // Dados mockados do memorial (Estáticos)
 const professorData = {
@@ -18,13 +18,24 @@ const professorData = {
 };
 
 export default function App() {
-  // Estado para guardar as obras que vêm do Sanity
-  const [works, setWorks] = useState([]);
+  const [works, setWorks] = useState([]); // Obras dele (Acervo)
+  const [contributions, setContributions] = useState([]); // Comunidade (Feed)
+  const [featured, setFeatured] = useState([]); // Destaques (Carrossel)
 
-  // Busca os dados assim que o site carrega
   useEffect(() => {
-    // Query para pegar Obras (Livros/Teses) ordenados por data
-    const query = `*[_type == "obra" && tipo == "book"] | order(data desc) {
+    // 1. Query para o Carrossel (Pega Obras E Contribuições marcadas como destaque)
+    // "coalesce" é um comando esperto: se não tiver linkExterno, ele pega o link do PDF
+    const featuredQuery = `*[_type in ["obra", "contribuicao"] && destaque == true] {
+      _id,
+      titulo,
+      resumo,
+      "imageUrl": imagemCapa.asset->url,
+      "link": coalesce(linkExterno, arquivoPdf.asset->url),
+      tipo
+    }`;
+
+    // 2. Query Obras (Acervo Histórico)
+    const worksQuery = `*[_type == "obra"] | order(data desc) {
       _id,
       titulo,
       data,
@@ -33,44 +44,85 @@ export default function App() {
       "pdfUrl": arquivoPdf.asset->url
     }`;
 
-    client.fetch(query)
-      .then((data) => {
-        console.log("DADOS RECEBIDOS DO SANITY:", data);
-        
-        // Formata os dados para o padrão que o seu componente espera
-        const formattedWorks = data.map(item => ({
-          id: item._id,
-          title: item.titulo,
-          date: item.data,
-          description: item.resumo,
-          imageUrl: item.imageUrl, // O Sanity já manda a URL completa aqui
-          pdfUrl: item.pdfUrl
-        }));
-        
-        setWorks(formattedWorks);
-      })
-      .catch((error) => {
-        console.error("ERRO NO FETCH:", error);
-      });
-  }, []); // <--- ISSO AQUI (}, []);) ESTAVA FALTANDO
+    // 3. Query Contribuições da Comunidade
+    const contributionsQuery = `*[_type == "contribuicao"] | order(_createdAt desc) {
+      _id,
+      titulo,
+      tipo,
+      autor,
+      cargoAutor,
+      data,
+      resumo,
+      categoria,
+      linkExterno,
+      "imageUrl": imagemCapa.asset->url
+    }`;
+
+    // Buscando tudo junto (Mais rápido)
+    Promise.all([
+      client.fetch(featuredQuery),
+      client.fetch(worksQuery),
+      client.fetch(contributionsQuery)
+    ])
+    .then(([featuredData, worksData, contributionsData]) => {
+      
+      // Formata Destaques (Carrossel)
+      const formattedFeatured = featuredData.map(item => ({
+        id: item._id,
+        title: item.titulo,
+        description: item.resumo,
+        imageUrl: item.imageUrl,
+        link: item.link, 
+        type: item.tipo
+      }));
+      setFeatured(formattedFeatured);
+
+      // Formata Obras (Acervo)
+      const formattedWorks = worksData.map(item => ({
+        id: item._id,
+        title: item.titulo,
+        date: item.data,
+        description: item.resumo,
+        imageUrl: item.imageUrl,
+        pdfUrl: item.pdfUrl
+      }));
+      setWorks(formattedWorks);
+
+      // Formata Contribuições (Feed)
+      const formattedContributions = contributionsData.map(item => ({
+        id: item._id,
+        type: item.tipo, 
+        title: item.titulo,
+        author: item.autor,
+        authorRole: item.cargoAutor,
+        date: item.data,
+        excerpt: item.resumo,
+        category: item.categoria,
+        link: item.linkExterno,
+        imageUrl: item.imageUrl
+      }));
+      setContributions(formattedContributions);
+    })
+    .catch((error) => {
+      console.error("ERRO NO FETCH:", error);
+    });
+  }, []);
 
   return (
     <div className="min-h-screen">
       <Header />
-
-      {/* Hero Carousel */}
-      {/* Nota: Se o Hero precisar de obras, passe 'works'. Se for estático, ok. */}
-      <HeroCarousel works={works} />
-
+      
+      {/* Hero agora recebe 'items' (os destaques) em vez de 'works' */}
+      <HeroCarousel items={featured} /> 
+      
       {/* Feed da Comunidade */}
-      <CommunityFeed />
+      <CommunityFeed contributions={contributions} /> 
 
-      {/* Citação */}
       <QuoteSection quote={professorData.quote} />
-
-      {/* Fundação Histórica (Onde as teses vão aparecer) */}
+      
+      {/* Fundação Histórica (Acervo) */}
       <HistoricalFoundation works={works} />
-
+      
       {/* Rodapé */}
       <footer className="bg-sepia-coffee text-sepia-cream py-12 px-6 border-t-4 border-sepia-brown">
         <div className="container mx-auto max-w-7xl">
